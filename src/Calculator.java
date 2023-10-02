@@ -9,9 +9,9 @@ public class Calculator implements ActionListener {
     JButton[] functionBtn = new JButton[8];
     JButton addBtn, subtractBtn, multiplyBtn, divideBtn, decimalBtn, equalBtn, deleteBtn, clearBtn;
     JPanel panel;
-    Font myFont = new Font("Serif", Font.BOLD, 25);
+    Font myFont = new Font("Serif", Font.BOLD, 20);
     double num1=0, num2=0, result=0;
-    char operator;
+    Character operator;
     Calculator () {
         frame = new JFrame("My 1st Calculator in Java");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -56,12 +56,30 @@ public class Calculator implements ActionListener {
             numberBtn[i].setFocusable(false);
         }
 
-        deleteBtn.setBounds(40, 430, 140, 50);
-        clearBtn.setBounds(250, 430, 140, 50);
+        deleteBtn.setBounds(50, 430, 140, 50);
+        clearBtn.setBounds(210, 430, 140, 50);
 
         panel = new JPanel();
-//        panel.setBounds();
+        panel.setBounds(50, 100, 300, 300);
+        panel.setLayout(new GridLayout(4,4, 10, 10));
+        panel.add(numberBtn[7]);
+        panel.add(numberBtn[8]);
+        panel.add(numberBtn[9]);
+        panel.add(addBtn);
+        panel.add(numberBtn[4]);
+        panel.add(numberBtn[5]);
+        panel.add(numberBtn[6]);
+        panel.add(subtractBtn);
+        panel.add(numberBtn[1]);
+        panel.add(numberBtn[2]);
+        panel.add(numberBtn[3]);
+        panel.add(multiplyBtn);
+        panel.add(decimalBtn);
+        panel.add(numberBtn[0]);
+        panel.add(equalBtn);
+        panel.add(divideBtn);
 
+        frame.add(panel);
         frame.add(deleteBtn);
         frame.add(clearBtn);
         frame.add(textField);
@@ -74,6 +92,55 @@ public class Calculator implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        for (int i = 0; i < numberBtn.length; i++) {
+            if (e.getSource() == numberBtn[i]) {
+                textField.setText(textField.getText().concat(String.valueOf(i)));
+            }
+        }
 
+        if (e.getSource() == decimalBtn) {
+            textField.setText(textField.getText().concat("."));
+        }
+        if (e.getSource() == addBtn) {
+            setOperator('+');
+        }
+        if (e.getSource() == subtractBtn) {
+            setOperator('-');
+        }
+        if (e.getSource() == multiplyBtn) {
+            setOperator('*');
+        }
+        if (e.getSource() == divideBtn) {
+            setOperator('/');
+        }
+        if (e.getSource() == equalBtn) {
+            num2 = Double.parseDouble(textField.getText());
+            switch (operator) {
+                case '-' -> result=num1-num2;
+                case '+' -> result=num1+num2;
+                case '*' -> result=num1*num2;
+                case '/' -> result=num1/num2;
+            }
+            textField.setText(String.valueOf(result));
+            num1 = result;
+        }
+
+        if (e.getSource() == deleteBtn) {
+            StringBuilder currentValue = new StringBuilder(textField.getText());
+            if (!textField.getText().isEmpty()) {
+            currentValue.delete(currentValue.length()-1, currentValue.length());
+            textField.setText(String.valueOf(currentValue));
+            }
+            System.out.println(textField.getText());
+        }
+        if (e.getSource() == clearBtn) {
+            textField.setText("");
+        }
+    }
+
+    public void setOperator(char operator) {
+        num1 = !textField.getText().isEmpty() ? Double.parseDouble(textField.getText()) : 0;
+        this.operator = !textField.getText().isEmpty() ? operator : null;
+        textField.setText("");
     }
 }
