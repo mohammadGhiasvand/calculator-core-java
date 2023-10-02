@@ -11,7 +11,7 @@ public class Calculator implements ActionListener {
     JPanel panel;
     Font myFont = new Font("Serif", Font.BOLD, 20);
     double num1=0, num2=0, result=0;
-    Character operator;
+    Character operator = 'x';
     Calculator () {
         frame = new JFrame("My 1st Calculator in Java");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -41,10 +41,10 @@ public class Calculator implements ActionListener {
         functionBtn[6] = deleteBtn;
         functionBtn[7] = clearBtn;
 
-        for (int i = 0; i < functionBtn.length; i++) {
-            functionBtn[i].addActionListener(this);
-            functionBtn[i].setFont(myFont);
-            functionBtn[i].setFocusable(false);
+        for (JButton jButton : functionBtn) {
+            jButton.addActionListener(this);
+            jButton.setFont(myFont);
+            jButton.setFocusable(false);
 
         }
 
@@ -114,12 +114,18 @@ public class Calculator implements ActionListener {
             setOperator('/');
         }
         if (e.getSource() == equalBtn) {
-            num2 = Double.parseDouble(textField.getText());
+            num2 = !textField.getText().isEmpty() ?  Double.parseDouble(textField.getText()) : 0;
+            boolean isEmpty = false;
+            System.out.println(operator);
             switch (operator) {
                 case '-' -> result=num1-num2;
                 case '+' -> result=num1+num2;
                 case '*' -> result=num1*num2;
                 case '/' -> result=num1/num2;
+                default -> isEmpty=true;
+            }
+            if (isEmpty ) {
+                result = 0;
             }
             textField.setText(String.valueOf(result));
             num1 = result;
@@ -140,7 +146,7 @@ public class Calculator implements ActionListener {
 
     public void setOperator(char operator) {
         num1 = !textField.getText().isEmpty() ? Double.parseDouble(textField.getText()) : 0;
-        this.operator = !textField.getText().isEmpty() ? operator : null;
+        this.operator = !textField.getText().isEmpty() ? operator : 'x';
         textField.setText("");
     }
 }
